@@ -10,4 +10,4 @@ promedio = suma_total / len (mis_notas)
 # Imprimir resultados de forma clara
 print (f"Suma total de las notas: {suma_total}")
 print (f"Promedio de las notas: {promedio: 2f}")
-print ("Flavio Rojas.")
+print ("Realizado por Flavio Rojas")

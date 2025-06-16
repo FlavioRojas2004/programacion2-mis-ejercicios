@@ -6,4 +6,4 @@ print("-----------------------------------")
 for i, comidas in enumerate(comidas, start=1):
     print(f"Comidas {i}: {comidas}")
 print("-----------------------------------")
-print("Flavio Rojas.")
+print("Realizado por Flavio Rojas.")

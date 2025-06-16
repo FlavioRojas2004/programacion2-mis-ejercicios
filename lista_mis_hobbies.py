@@ -1,14 +1,13 @@
 # Lista con tus notas
 notas = [85, 90, 78, 92, 88]
-
 # Mostrar todas las notas
 print("Tus notas son:")
 for i in range(len(notas)):
     print(f"Nota {i + 1}: {notas[i]}")
-
 # Calcular el promedio
 promedio = sum(notas) / len(notas)
 print(f"\nPromedio final: {promedio}")
+print("-------------------------------------")
 
 # Lista de hobbies 
 hobbies = ["Leer libros", "Jugar fútbol", "Escuchar música"]

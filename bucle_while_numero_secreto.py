@@ -13,3 +13,4 @@ while intento != numero_secreto:
     intento = int(input("Ingresa otro número: "))
 # Paso 4: Mensaje de felicitaciones
 print(f"¡Correcto! El número era {numero_secreto}.")
+print("Realizado por Flavio Rojas.")

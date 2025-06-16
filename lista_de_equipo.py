@@ -13,3 +13,4 @@ for nombre in nombres_estudiantes:
             print(f"¡Bienvenida al equipo, {nombre}!")
         else:
             print(f"¡Bienvenido al equipo, {nombre}!")
+print("Realizado por Flavio Rojas.")

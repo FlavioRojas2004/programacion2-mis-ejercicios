@@ -3,3 +3,4 @@ print(f"--- Tabla del numero {numero_tabla} ---") #
 for i in range(1, 11): # i tomará valores de 1 a 10
  resultado = numero_tabla * i
  print(f"{numero_tabla} x {i} = {resultado}") #Muestra el resultado en consola 
+print("Realizado po Flavio Rojas.")      
