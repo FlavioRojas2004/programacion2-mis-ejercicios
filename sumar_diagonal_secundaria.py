@@ -11,7 +11,7 @@ por ejemplo, en una matriz de 3x3:
   suma = 0
   for i in range(n):
     suma += matriz[i][n - 1 - i] #accede al elemento en la posicion 
-  (i, n - 1 - i)
+    (i, n - 1 - i)
   return suma
 #funcion de prueba para validar que la suma_diagonal_secundaria funcione correctamente
 def probar_sumar_diagonal_secundaria():
