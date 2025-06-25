@@ -118,3 +118,4 @@ def menu():
 agenda = cargar_contactos()
 # Iniciar menú interactivo
 menu()
+print("Realizado por Flavio Rojas.")
