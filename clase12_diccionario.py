@@ -61,3 +61,4 @@ def main_inventario():
     mostrar_inventario(inventario)
 if __name__ == "__main__":
     main_inventario()
+print("Realizado por Flavio Rojas.")

@@ -16,3 +16,4 @@ if __name__ == "__main__":
   print ("antes:" , numeros)
   ordenamiento_de_burbuja(numeros)
   print ("despues:" , numeros)
+print("Realizado por Flavio Rojas.")

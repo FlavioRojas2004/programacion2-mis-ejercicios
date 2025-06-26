@@ -26,3 +26,4 @@ def probar_suma_por_filas():
  print("¡Pruebas para sumar_por_filas pasaron! ")
 # Llamamos a la función para ejecutar las pruebas
 probar_suma_por_filas()
+print("Realizado por Flavio Rojas.")

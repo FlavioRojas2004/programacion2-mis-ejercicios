@@ -27,3 +27,4 @@ def probar_suma_diagonal_principal():
  print("¡Pruebas para sumar_diagonal_principal pasaron! ")
 # Llamamos a la función para ejecutar las pruebas
 probar_suma_diagonal_principal()
+print("Realizado por Flavio Rojas.")
