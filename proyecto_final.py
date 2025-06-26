@@ -1,16 +1,15 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 import json
 
-# ---------- Persistencia ----------
+# ---------- Configuración ----------
 ARCHIVO_DATOS = "inventario.json"
-
-# Diccionario para guardar frutas y cantidades
 inventario = {}
 
+# ---------- Funciones de persistencia ----------
 def guardar_inventario():
     with open(ARCHIVO_DATOS, "w") as archivo:
-        json.dump(inventario, archivo)
+        json.dump(inventario, archivo, indent=4)
 
 def cargar_inventario():
     global inventario
@@ -20,131 +19,137 @@ def cargar_inventario():
     except FileNotFoundError:
         inventario = {}
 
-# ---------- Funciones principales ----------
-
+# ---------- Funciones de gestión ----------
 def agregar_fruta():
-    fruta = entrada_fruta.get().strip()
+    fruta = entrada_fruta.get().strip().capitalize()
     try:
         cantidad = int(entrada_cantidad.get())
         if fruta:
             inventario[fruta] = inventario.get(fruta, 0) + cantidad
             guardar_inventario()
-            print(f"Se agregó {cantidad} unidad(es) de '{fruta}'. Total: {inventario[fruta]}")
             actualizar_lista()
             limpiar_campos()
         else:
-            print("⚠️ No ingresaste el nombre de la fruta.")
             messagebox.showwarning("Advertencia", "Ingrese el nombre de la fruta.")
     except ValueError:
-        print("❌ La cantidad no es un número válido.")
-        messagebox.showerror("Error", "Cantidad inválida.")
+        messagebox.showerror("Error", "Cantidad inválida. Ingrese un número entero.")
 
 def eliminar_fruta():
-    fruta = entrada_fruta.get().strip()
+    fruta = entrada_fruta.get().strip().capitalize()
     if fruta in inventario:
         del inventario[fruta]
         guardar_inventario()
-        print(f"'{fruta}' fue eliminada del inventario.")
         actualizar_lista()
         limpiar_campos()
     else:
-        print(f"⚠️ La fruta '{fruta}' no está en el inventario.")
-        messagebox.showinfo("Eliminar", "Fruta no encontrada.")
+        messagebox.showinfo("Eliminar", f"La fruta '{fruta}' no existe.")
 
 def editar_fruta():
-    fruta = entrada_fruta.get().strip()
+    fruta = entrada_fruta.get().strip().capitalize()
     try:
         cantidad = int(entrada_cantidad.get())
         if fruta in inventario:
             inventario[fruta] = cantidad
             guardar_inventario()
-            print(f"Cantidad de '{fruta}' actualizada a {cantidad}.")
             actualizar_lista()
             limpiar_campos()
         else:
-            print(f"⚠️ La fruta '{fruta}' no existe en el inventario.")
-            messagebox.showwarning("Editar", "Fruta no encontrada.")
+            messagebox.showwarning("Advertencia", f"La fruta '{fruta}' no está registrada.")
     except ValueError:
-        print("❌ La cantidad ingresada no es válida.")
         messagebox.showerror("Error", "Cantidad inválida.")
 
 def disminuir_fruta():
-    fruta = entrada_fruta.get().strip()
+    fruta = entrada_fruta.get().strip().capitalize()
     try:
         cantidad = int(entrada_cantidad.get())
         if fruta in inventario:
             if cantidad <= inventario[fruta]:
                 inventario[fruta] -= cantidad
                 guardar_inventario()
-                print(f"Se disminuyó {cantidad} de '{fruta}'. Quedan: {inventario[fruta]}")
                 actualizar_lista()
                 limpiar_campos()
                 if inventario[fruta] == 0:
-                    print(f"ℹ️ '{fruta}' ahora tiene 0 unidades.")
-                    messagebox.showinfo("Aviso", f"{fruta} ahora tiene 0 unidades.")
+                    messagebox.showinfo("Aviso", f"'{fruta}' ahora tiene 0 unidades.")
             else:
-                print(f"⚠️ Intentaste quitar más de lo que hay de '{fruta}'.")
-                messagebox.showwarning("Advertencia", "Cantidad mayor a lo disponible.")
+                messagebox.showwarning("Advertencia", "Cantidad mayor a la disponible.")
         else:
-            print(f"⚠️ La fruta '{fruta}' no está en el inventario.")
             messagebox.showinfo("Aviso", "Fruta no encontrada.")
     except ValueError:
-        print("❌ La cantidad no es válida.")
         messagebox.showerror("Error", "Cantidad inválida.")
 
+def buscar_fruta(*args):
+    consulta = entrada_busqueda.get().strip().lower()
+    lista_frutas.delete(0, tk.END)
+    for fruta, cantidad in inventario.items():
+        if consulta in fruta.lower():
+            lista_frutas.insert(tk.END, f"{fruta}: {cantidad}")
+
 def seleccionar_fruta(event):
-    seleccion = lista.curselection()
+    seleccion = lista_frutas.curselection()
     if seleccion:
-        item = lista.get(seleccion[0])
+        item = lista_frutas.get(seleccion[0])
         fruta, cantidad = item.split(":")
         entrada_fruta.delete(0, tk.END)
         entrada_fruta.insert(0, fruta.strip())
         entrada_cantidad.delete(0, tk.END)
         entrada_cantidad.insert(0, cantidad.strip())
-        print(f"Seleccionaste: {fruta.strip()} con {cantidad.strip()} unidades.")
 
 def actualizar_lista():
-    lista.delete(0, tk.END)
+    lista_frutas.delete(0, tk.END)
     for fruta, cantidad in inventario.items():
-        lista.insert(tk.END, f"{fruta}: {cantidad}")
+        lista_frutas.insert(tk.END, f"{fruta}: {cantidad}")
 
 def limpiar_campos():
     entrada_fruta.delete(0, tk.END)
     entrada_cantidad.delete(0, tk.END)
 
-# ---------- Cargar datos antes de mostrar ventana ----------
+# ---------- Cargar inventario ----------
 cargar_inventario()
 
-# ---------- Interfaz Gráfica ----------
+# ---------- Ventana principal ----------
 ventana = tk.Tk()
-ventana.title("🍎 Inventario de Frutas")
-ventana.configure(bg="#f0f5f5")
-ventana.geometry("550x500")
+ventana.title("🍓 Inventario de Frutas")
+ventana.geometry("550x550")
+ventana.configure(bg="#f9f9f9")
 
-tk.Label(ventana, text="Fruta:", bg="#f0f5f5").pack(pady=(10,0))
-entrada_fruta = tk.Entry(ventana, width=30)
+# ---------- Estilo moderno ----------
+estilo = ttk.Style()
+estilo.theme_use("clam")
+estilo.configure("TButton", padding=6, font=("Arial", 10))
+estilo.configure("TLabel", background="#f9f9f9", font=("Arial", 10))
+estilo.configure("TEntry", padding=5)
+
+# ---------- Widgets ----------
+ttk.Label(ventana, text="Fruta:").pack(pady=(10, 0))
+entrada_fruta = ttk.Entry(ventana, width=30)
 entrada_fruta.pack(pady=5)
 
-tk.Label(ventana, text="Cantidad:", bg="#f0f5f5").pack()
-entrada_cantidad = tk.Entry(ventana, width=30)
+ttk.Label(ventana, text="Cantidad:").pack()
+entrada_cantidad = ttk.Entry(ventana, width=30)
 entrada_cantidad.pack(pady=5)
 
 # Botones
-frame_botones = tk.Frame(ventana, bg="#f0f5f5")
+frame_botones = ttk.Frame(ventana)
 frame_botones.pack(pady=10)
 
-tk.Button(frame_botones, text="Agregar", bg="#d4f4dd", command=agregar_fruta, width=10).grid(row=0, column=0, padx=5, pady=2)
-tk.Button(frame_botones, text="Editar", bg="#fff3b0", command=editar_fruta, width=10).grid(row=0, column=1, padx=5, pady=2)
-tk.Button(frame_botones, text="Eliminar", bg="#ffcccc", command=eliminar_fruta, width=10).grid(row=0, column=2, padx=5, pady=2)
-tk.Button(frame_botones, text="Disminuir", bg="#cce5ff", command=disminuir_fruta, width=10).grid(row=1, column=1, padx=5, pady=5)
+ttk.Button(frame_botones, text="Agregar", command=agregar_fruta).grid(row=0, column=0, padx=5)
+ttk.Button(frame_botones, text="Editar", command=editar_fruta).grid(row=0, column=1, padx=5)
+ttk.Button(frame_botones, text="Eliminar", command=eliminar_fruta).grid(row=0, column=2, padx=5)
+ttk.Button(frame_botones, text="Disminuir", command=disminuir_fruta).grid(row=0, column=3, padx=5)
+
+# Buscador
+ttk.Label(ventana, text="Buscar fruta:").pack(pady=(10, 0))
+entrada_busqueda = ttk.Entry(ventana, width=30)
+entrada_busqueda.pack(pady=5)
+entrada_busqueda.bind("<KeyRelease>", buscar_fruta)
 
 # Lista
-tk.Label(ventana, text="Inventario Actual:", bg="#f0f5f5", font=("Arial", 10, "bold")).pack(pady=5)
-lista = tk.Listbox(ventana, width=40, height=10)
-lista.pack(pady=5)
-lista.bind("<<ListboxSelect>>", seleccionar_fruta)
+ttk.Label(ventana, text="Inventario actual:", font=("Arial", 10, "bold")).pack(pady=5)
+lista_frutas = tk.Listbox(ventana, width=45, height=12)
+lista_frutas.pack(pady=5)
+lista_frutas.bind("<<ListboxSelect>>", seleccionar_fruta)
 
-# Mostrar el inventario cargado
+# Mostrar datos
 actualizar_lista()
 
 ventana.mainloop()
